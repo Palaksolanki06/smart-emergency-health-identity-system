@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emergency Health ID</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+
+<body>
+
+  <!-- LOGIN PAGE -->
+  <div id="page-login" class="page active">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="logo-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h1>Emergency Health ID</h1>
+        <p>Your health data, always ready.</p>
+      </div>
+      <div class="card auth-card">
+        <h2>Sign in to your account</h2>
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label for="login-email">Email address</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+              <button type="button" class="toggle-password" onclick="togglePassword('login-password',this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div id="login-error" class="alert alert-error hidden">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="login-error-msg"></span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Sign in</button>
+        </form>
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="showPage('signup')">Create one</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNUP PAGE -->
+  <div id="page-signup" class="page">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="logo-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+        <h1>Create your Health ID</h1>
+        <p>Your emergency identity card, always on hand.</p>
+      </div>
+      <div class="card auth-card">
+        <h2>Create account</h2>
+        <form id="signup-form" novalidate>
+          <div class="form-group">
+            <label for="signup-name">Full Name *</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-user"></i>
+              <input type="text" id="signup-name" placeholder="John Doe" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-email">Email address *</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="signup-email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="signup-age">Age *</label>
+              <input type="number" id="signup-age" placeholder="25" min="1" max="120" />
+            </div>
+            <div class="form-group">
+              <label for="signup-blood">Blood Group *</label>
+              <select id="signup-blood">
+                <option value="">Select</option>
+                <option>A+</option>
+                <option>A-</option>
+                <option>B+</option>
+                <option>B-</option>
+                <option>AB+</option>
+                <option>AB-</option>
+                <option>O+</option>
+                <option>O-</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-phone">Phone (optional)</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-phone"></i>
+              <input type="tel" id="signup-phone" placeholder="+1 555 000 0000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password *</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="signup-password" placeholder="••••••••" />
+              <button type="button" class="toggle-password" onclick="togglePassword('signup-password',this)">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm">Confirm Password *</label>
+            <div class="input-icon">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="signup-confirm" placeholder="••••••••" />
+            </div>
+          </div>
+          <div id="signup-error" class="alert alert-error hidden">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span id="signup-error-msg"></span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Create account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="showPage('login')">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div id="page-dashboard" class="page">
+    <header class="navbar">
+      <div class="navbar-brand"><i class="fa-solid fa-shield-heart"></i><span>HealthID</span></div>
+      <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </header>
+    <main class="main-content">
+      <div class="card profile-summary fade-in">
+        <div class="profile-summary-row">
+          <div class="avatar-circle" id="dash-avatar"></div>
+          <div class="profile-info">
+            <p class="label-small">Welcome back</p>
+            <h2 id="dash-name"></h2>
+            <p class="muted" id="dash-email"></p>
+          </div>
+          <div class="blood-badge"><i class="fa-solid fa-droplet"></i><span id="dash-blood"></span></div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-box"><span id="stat-diseases">0</span><small>Diseases</small></div>
+          <div class="stat-box"><span id="stat-allergies">0</span><small>Allergies</small></div>
+          <div class="stat-box"><span id="stat-meds">0</span><small>Medications</small></div>
+        </div>
+      </div>
+      <div class="fade-in stagger-1">
+        <button class="btn-emergency pulse" onclick="showPage('emergency')">
+          <i class="fa-solid fa-triangle-exclamation"></i> EMERGENCY MODE
+        </button>
+        <p class="hint">Displays critical info for first responders</p>
+      </div>
+      <div class="fade-in stagger-2">
+        <h3 class="section-title">Your Health Records</h3>
+        <div class="nav-cards">
+          <button class="nav-card blue" onclick="showPage('profile')">
+            <div class="nav-card-icon"><i class="fa-solid fa-user"></i></div>
+            <div>
+              <p class="nav-card-label">My Profile</p>
+              <p class="nav-card-desc">View and edit personal details</p>
+            </div>
+            <i class="fa-solid fa-chevron-right nav-card-arrow"></i>
+          </button>
+          <button class="nav-card indigo" onclick="showPage('medical')">
+            <div class="nav-card-icon"><i class="fa-solid fa-file-medical"></i></div>
+            <div>
+              <p class="nav-card-label">Medical Data</p>
+              <p class="nav-card-desc">Diseases, allergies &amp; medications</p>
+            </div>
+            <i class="fa-solid fa-chevron-right nav-card-arrow"></i>
+          </button>
+          <button class="nav-card green" onclick="showPage('contacts')">
+            <div class="nav-card-icon"><i class="fa-solid fa-phone"></i></div>
+            <div>
+              <p class="nav-card-label">Emergency Contacts</p>
+              <p class="nav-card-desc" id="contacts-count-desc">0 contacts saved</p>
+            </div>
+            <i class="fa-solid fa-chevron-right nav-card-arrow"></i>
+          </button>
+          <button class="nav-card purple" onclick="showPage('qrcode')">
+            <div class="nav-card-icon"><i class="fa-solid fa-qrcode"></i></div>
+            <div>
+              <p class="nav-card-label">QR Code</p>
+              <p class="nav-card-desc">Scan to share your health ID</p>
+            </div>
+            <i class="fa-solid fa-chevron-right nav-card-arrow"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card patient-id-footer fade-in stagger-3">
+        <p class="label-small">Patient ID</p>
+        <p class="patient-id-value" id="dash-patient-id"></p>
+      </div>
+    </main>
+  </div>
+
+  <!-- PROFILE PAGE -->
+  <div id="page-profile" class="page">
+    <header class="navbar">
+      <button class="btn-back" onclick="showPage('dashboard')"><i class="fa-solid fa-arrow-left"></i></button>
+      <span class="navbar-title">My Profile</span>
+      <button class="btn-edit" id="edit-btn" onclick="toggleProfileEdit()"><i class="fa-solid fa-pen"></i> Edit</button>
+    </header>
+    <main class="main-content">
+      <div class="profile-hero fade-in">
+        <div class="avatar-circle large" id="profile-avatar"></div>
+        <h2 id="profile-name-display"></h2>
+        <p class="muted" id="profile-email-display"></p>
+      </div>
+      <div class="card blood-card fade-in stagger-1">
+        <div class="blood-card-icon"><i class="fa-solid fa-droplet"></i></div>
+        <div>
+          <p class="label-small red">Blood Group</p>
+          <div id="blood-view"><span class="blood-big" id="profile-blood-display"></span></div>
+          <div id="blood-edit" class="hidden">
+            <select id="profile-blood-edit" class="blood-select">
+              <option value="">Select</option>
+              <option>A+</option>
+              <option>A-</option>
+              <option>B+</option>
+              <option>B-</option>
+              <option>AB+</option>
+              <option>AB-</option>
+              <option>O+</option>
+              <option>O-</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card profile-fields fade-in stagger-2">
+        <div class="profile-field">
+          <div class="field-icon"><i class="fa-solid fa-user"></i></div>
+          <div class="field-body">
+            <p class="label-small">Full Name</p>
+            <p class="field-value" id="pf-name-view"></p>
+            <input type="text" class="field-input hidden" id="pf-name-edit" placeholder="Your name" />
+          </div>
+        </div>
+        <div class="profile-field">
+          <div class="field-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="field-body">
+            <p class="label-small">Email</p>
+            <p class="field-value" id="pf-email-view"></p>
+            <input type="email" class="field-input hidden" id="pf-email-edit" placeholder="you@example.com" />
+          </div>
+        </div>
+        <div class="profile-field">
+          <div class="field-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="field-body">
+            <p class="label-small">Phone</p>
+            <p class="field-value" id="pf-phone-view"></p>
+            <input type="tel" class="field-input hidden" id="pf-phone-edit" placeholder="+1 555 000 0000" />
+          </div>
+        </div>
+        <div class="profile-field no-border">
+          <div class="field-icon"><i class="fa-solid fa-calendar"></i></div>
+          <div class="field-body">
+            <p class="label-small">Age</p>
+            <p class="field-value" id="pf-age-view"></p>
+            <input type="number" class="field-input hidden" id="pf-age-edit" placeholder="25" />
+          </div>
+        </div>
+      </div>
+      <div id="profile-save-row" class="save-row hidden">
+        <button class="btn btn-outline" onclick="cancelProfileEdit()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveProfile()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+      </div>
+      <p class="muted text-center fade-in stagger-3" id="profile-member-since"></p>
+    </main>
+  </div>
+
+  <!-- MEDICAL DATA PAGE -->
+  <div id="page-medical" class="page">
+    <header class="navbar">
+      <button class="btn-back" onclick="showPage('dashboard')"><i class="fa-solid fa-arrow-left"></i></button>
+      <span class="navbar-title">Medical Data</span>
+      <span></span>
+    </header>
+    <main class="main-content">
+      <div class="card medical-category fade-in">
+        <div class="category-header orange-bg">
+          <div class="category-icon orange"><i class="fa-solid fa-heart-crack"></i></div>
+          <div>
+            <h3>Diseases</h3>
+            <p class="label-small" id="diseases-count">0 items</p>
+          </div>
+        </div>
+        <div class="category-body">
+          <div class="tags-container" id="diseases-tags"></div>
+          <div class="add-row">
+            <input type="text" id="diseases-input" placeholder="Add disease..."
+              onkeydown="if(event.key==='Enter')addMedical('diseases')" />
+            <button class="btn btn-primary btn-icon" onclick="addMedical('diseases')"><i
+                class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="card medical-category fade-in stagger-1">
+        <div class="category-header red-bg">
+          <div class="category-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <h3>Allergies</h3>
+            <p class="label-small" id="allergies-count">0 items</p>
+          </div>
+        </div>
+        <div class="category-body">
+          <div class="tags-container" id="allergies-tags"></div>
+          <div class="add-row">
+            <input type="text" id="allergies-input" placeholder="Add allergy..."
+              onkeydown="if(event.key==='Enter')addMedical('allergies')" />
+            <button class="btn btn-primary btn-icon" onclick="addMedical('allergies')"><i
+                class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="card medical-category fade-in stagger-2">
+        <div class="category-header blue-bg">
+          <div class="category-icon blue-icon"><i class="fa-solid fa-pills"></i></div>
+          <div>
+            <h3>Medications</h3>
+            <p class="label-small" id="medications-count">0 items</p>
+          </div>
+        </div>
+        <div class="category-body">
+          <div class="tags-container" id="medications-tags"></div>
+          <div class="add-row">
+            <input type="text" id="medications-input" placeholder="Add medication..."
+              onkeydown="if(event.key==='Enter')addMedical('medications')" />
+            <button class="btn btn-primary btn-icon" onclick="addMedical('medications')"><i
+                class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- EMERGENCY CONTACTS PAGE -->
+  <div id="page-contacts" class="page">
+    <header class="navbar">
+      <button class="btn-back" onclick="showPage('dashboard')"><i class="fa-solid fa-arrow-left"></i></button>
+      <span class="navbar-title">Emergency Contacts</span>
+      <button class="btn-add-contact" onclick="toggleContactForm()"><i class="fa-solid fa-user-plus"></i> Add</button>
+    </header>
+    <main class="main-content">
+      <div id="contact-form-panel" class="card hidden fade-in">
+        <h3 style="margin-bottom:16px">New Contact</h3>
+        <div class="form-group"><label for="c-name">Full Name *</label><input type="text" id="c-name"
+            placeholder="Jane Doe" /></div>
+        <div class="form-group"><label for="c-phone">Phone Number *</label><input type="tel" id="c-phone"
+            placeholder="+1 555 000 0000" /></div>
+        <div class="form-group"><label for="c-rel">Relationship (optional)</label><input type="text" id="c-rel"
+            placeholder="e.g. Spouse, Parent" /></div>
+        <p id="contact-form-error" class="error-text hidden"></p>
+        <div class="form-row gap">
+          <button class="btn btn-outline" onclick="toggleContactForm()">Cancel</button>
+          <button class="btn btn-primary" onclick="addContact()"><i class="fa-solid fa-plus"></i> Add Contact</button>
+        </div>
+      </div>
+      <div id="contacts-list"></div>
+      <div id="contacts-empty" class="empty-state hidden">
+        <div class="empty-icon"><i class="fa-solid fa-phone"></i></div>
+        <h3>No contacts yet</h3>
+        <p>Add emergency contacts so first responders know who to call.</p>
+        <button class="btn btn-primary" onclick="toggleContactForm()"><i class="fa-solid fa-user-plus"></i> Add your
+          first contact</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- EMERGENCY SCREEN -->
+  <div id="page-emergency" class="page emergency-page">
+    <div class="emergency-header">
+      <div class="emergency-title-row">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <div>
+          <p class="em-sub">Emergency</p>
+          <h1>Medical ID</h1>
+        </div>
+      </div>
+      <button class="em-close" onclick="showPage('dashboard')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="emergency-patient">
+      <p class="em-label">Patient</p>
+      <h2 id="em-name"></h2>
+      <p class="em-sub-info">Age <span id="em-age"></span></p>
+    </div>
+    <div class="emergency-body">
+      <div class="em-card white">
+        <div class="em-card-title red"><i class="fa-solid fa-droplet"></i> Blood Group</div>
+        <div class="em-blood" id="em-blood"></div>
+      </div>
+      <div class="em-card white">
+        <div class="em-card-title orange"><i class="fa-solid fa-circle-exclamation"></i> Allergies</div>
+        <div class="em-tags" id="em-allergies"></div>
+      </div>
+      <div class="em-card white" id="em-diseases-card">
+        <div class="em-card-title gray"><i class="fa-solid fa-heart-crack"></i> Known Conditions</div>
+        <div class="em-tags" id="em-diseases"></div>
+      </div>
+      <div class="em-card white" id="em-meds-card">
+        <div class="em-card-title blue2"><i class="fa-solid fa-pills"></i> Current Medications</div>
+        <div class="em-tags" id="em-meds"></div>
+      </div>
+      <div class="em-card white">
+        <div class="em-card-title green"><i class="fa-solid fa-phone"></i> Emergency Contact</div>
+        <div id="em-contacts"></div>
+      </div>
+    </div>
+    <div class="emergency-footer">
+      <p>Generated by Emergency Health ID System</p>
+      <p>Patient ID: <span id="em-pid"></span></p>
+    </div>
+  </div>
+
+  <!-- QR CODE PAGE -->
+  <div id="page-qrcode" class="page">
+    <header class="navbar">
+      <button class="btn-back" onclick="showPage('dashboard')"><i class="fa-solid fa-arrow-left"></i></button>
+      <span class="navbar-title">QR Code</span>
+      <span></span>
+    </header>
+    <main class="main-content">
+      <div class="card qr-card fade-in">
+        <div class="qr-canvas-wrap"><canvas id="qr-canvas"></canvas></div>
+        <div class="qr-info">
+          <h3 id="qr-name"></h3>
+          <p class="muted">Emergency Health ID</p>
+          <div class="qr-meta">
+            <span class="blood-inline" id="qr-blood"></span>
+            <span class="dot-sep">•</span>
+            <span class="muted">Age <span id="qr-age"></span></span>
+          </div>
+        </div>
+      </div>
+      <div class="card info-box fade-in stagger-1">
+        <p class="label-small purple">Patient ID</p>
+        <p class="mono" id="qr-pid"></p>
+      </div>
+      <div class="card info-box fade-in stagger-2">
+        <p class="label-small gray">QR encodes</p>
+        <p class="mono small" id="qr-url"></p>
+      </div>
+      <div class="btn-row fade-in stagger-3">
+        <button class="btn btn-primary btn-row-item" onclick="downloadQR()"><i class="fa-solid fa-download"></i>
+          Download</button>
+        <button class="btn btn-outline btn-row-item" onclick="shareQR()"><i class="fa-solid fa-share-nodes"></i>
+          Share</button>
+      </div>
+      <p class="muted text-center hint fade-in stagger-4">First responders can scan this QR code to quickly access your
+        critical health information.</p>
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="script.js"></script>
+</body>
+
+</html>
