@@ -1,28 +1,9 @@
-# 🧠 Smart Emergency Health Identity System
+# Smart Emergency Health Identity System
 
-A web-based application that stores medical data.
+This is an AI-based project for storing and accessing emergency health data using QR code.
 
-## 🚀 Features
-- User Login & Signup
-- Profile Management
-- Medical Records (Diseases, Allergies)
-- Emergency Contacts
+Features:
+- Login / Signup
+- Medical Data
 - Emergency Mode
 - QR Code Access
-
-## 🛠️ Technologies Used
-- HTML
-- CSS
-- JavaScript
-- LocalStorage
-
-## 📌 How to Use
-1. Register/Login
-2. Fill your medical details
-3. Generate QR code
-4. Use QR in emergency
-
-## 💡 Future Enhancements
-- AI health prediction
-- Face recognition login
-- Hospital integration
