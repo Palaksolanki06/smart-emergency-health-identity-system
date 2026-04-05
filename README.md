@@ -1,6 +1,6 @@
 # Smart Emergency Health Identity System
 
-This is an AI-based project for storing and accessing emergency health data using QR code.
+This is an AI-based project for storing and accessing emergency health data.
 
 Features:
 - Login / Signup
